@@ -12,7 +12,7 @@
                 {{-- Success Alert --}}
                 @if (session('status'))
                     <div class="mb-6 p-4 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg shadow">
-                        {{ session('status') }}
+                        {{ __(session('status')) }}
                     </div>
                 @endif
 
