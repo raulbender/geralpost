@@ -17,7 +17,7 @@ public function create(): View {
         
         $validated = $request->validated();
 
-        logger()->info('Post data successfully received:', $validated);
+        $request->user()->posts()->create($validated);
 
         return back()->with('status', 'Post successfully scheduled on the radar!');
     }
