@@ -26,4 +26,30 @@ class PostController extends Controller {
         $posts = Post::forFeed()->latest()->get();
         return view('welcome', compact('posts'));
     }
+
+    public function adminIndex(): View {
+        $pendingPosts = Post::onlyRevised()->latest()->get();
+
+        return view('posts.admin', compact('pendingPosts'));
+    }
+
+    public function approve(Post $post): RedirectResponse {
+        $post->update([
+            'status' => 'published',
+        ]);
+
+        return redirect()
+            ->route('admin.posts.index')
+            ->with('success', 'News article approved successfully and published to the global feed! 🚀');
+    }
+
+    public function discard(Post $post): RedirectResponse {
+        $post->update([
+            'status' => 'discarded',
+        ]);
+
+        return redirect()
+            ->route('admin.posts.index')
+            ->with('success', 'News article discarded successfully. 🗑️');
+    }
 }

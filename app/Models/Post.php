@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Post extends Model {
     protected $fillable = [
+        'user_id',
         'title',
         'content',
         'scheduled_at',
@@ -19,10 +20,11 @@ class Post extends Model {
     }
 
     public function scopeForFeed(Builder $query): Builder {
-        // Today: It shows everything for us to see the cards on the screen, but in production, it should only show published posts.
-        return $query->whereIn('status', ['pending', 'published']);
+        return $query->where('status', 'published');
+    }    
 
-        // In the future (when Redis is active), you will only need to comment the line above and uncomment this one:
-        // return $query->where('status', 'published');
+    public function scopeOnlyRevised(Builder $query): Builder {
+        return $query->where('status', 'revised');
     }
+
 }

@@ -12,7 +12,11 @@ Route::get('/dashboard', function () {return view('dashboard');})->middleware(['
 
 Route::get('/', [PostController::class, 'index'])->name('home');
 
+
 Route::middleware('auth')->group(function () {
+    Route::get('/admin/posts', [PostController::class, 'adminIndex'])->name('admin.posts.index');
+    Route::patch('/admin/posts/{post}/approve', [PostController::class, 'approve'])->name('admin.posts.approve');
+    Route::patch('/admin/posts/{post}/discard', [PostController::class, 'discard'])->name('admin.posts.discard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
