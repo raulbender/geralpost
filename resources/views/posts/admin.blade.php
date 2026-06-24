@@ -34,7 +34,7 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 border border-gray-100 dark:border-gray-700 md:flex md:items-center md:justify-between gap-6">
 
                 <div class="flex-1">
-                    <div class="flex items-center space-x-3 mb-2">
+                    <div class="flex items-center justify-between mb-2">
                         <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-400">
                             {{ $post->status }}
                         </span>
@@ -45,7 +45,7 @@
                     <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-1">
                         {{ $post->title }}
                     </h2>
-                    <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">
+                    <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 truncate">
                         {{ $post->content }}
                     </p>
                 </div>
