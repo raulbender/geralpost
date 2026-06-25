@@ -45,7 +45,7 @@ class SearchTaskSeeder extends Seeder
                     'Planalto', 'Congresso Nacional', 'STF', 'TSE', 'Câmara dos Deputados', 
                     'Senado Federal', 'Reforma Política', 'Partidos Políticos', 
                     // Principais Atores e Líderes
-                    'Flávio Bolsonaro', 'Lula', 'Renan Santos', 'Ronaldo Caiado', 'Augusto Cury'
+                    'Bolsonaro', 'Lula', 'Renan Santos', 'Ronaldo Caiado', 'Augusto Cury'
                 ],
                 'language' => 'pt',
                 'country_code' => 'BR',
