@@ -50,6 +50,25 @@ class NewsIngestionService
         $newItemsCount = 0;
 
         foreach ($xml->channel->item as $item) {
+            // ⏳ FILTRO TEMPORAL SÊNIOR: Captura a data de publicação do RSS
+            $pubDateString = (string) $item->pubDate;
+            
+            if (!empty($pubDateString)) {
+                try {
+                    $pubDate = \Illuminate\Support\Carbon::parse($pubDateString);
+                    
+                    // Se a notícia foi publicada ANTES de 24 horas atrás, ignora e pula
+                    if ($pubDate->isBefore(now()->subHours(48))) {
+                        continue;
+                    }
+                } catch (\Exception $e) {
+                    // Failsafe: Se a data vier corrompida, fazemos o log e deixamos passar por segurança
+                    \Illuminate\Support\Facades\Log::warning("Erro ao parsear data do RSS: " . $pubDateString);
+                }
+            }
+
+
+
             $newsLink = (string) $item->link;
             $newsTitle = (string) $item->title;
             $newsSource = (string) $item->source;
