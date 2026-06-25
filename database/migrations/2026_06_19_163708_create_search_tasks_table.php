@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('language', 5)->default('pt');
             $table->string('country_code', 2)->nullable();
             $table->string('state_code', 3)->nullable();
+            $table->text('context_instructions')->nullable();
 
 
             $table->boolean('is_active')->default(true);
