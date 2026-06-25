@@ -106,28 +106,57 @@ class GeminiCurationService
             ? implode(', ', $task->keywords) 
             : (is_string($task->keywords) ? $task->keywords : '');
         
-        return <<<PROMPT
-Você é o Editor-Chefe Sênior de um portal de notícias tecnológico automatizado.
-Sua missão é avaliar um lote de notícias vindas do estágio e decidir quais são altamente RELEVANTES para a nossa persona e quais devem ser DESCARTADAS.
+//         return <<<PROMPT
+// Você é o Editor-Chefe Sênior de um portal de notícias tecnológico automatizado.
+// Sua missão é avaliar um lote de notícias vindas do estágio e decidir quais são altamente RELEVANTES para a nossa persona e quais devem ser DESCARTADAS.
 
---- DIRETRIZES DA TAREFA DE BUSCA ---
-- Nome do Contexto: {$task->name}
-- Palavras-chave de Origem: {$keywordsString}
-- Notas de Contexto Adicionais: {$task->context_instructions}
+// --- DIRETRIZES DA TAREFA DE BUSCA ---
+// - Nome do Contexto: {$task->name}
+// - Palavras-chave de Origem: {$keywordsString}
+// - Notas de Contexto Adicionais: {$task->context_instructions}
 
---- REGRA DE OURO: EVITAR DUPLICIDADE (ÚLTIMAS 48 HORAS) ---
-Abaixo está a lista de títulos que JÁ foram aprovados ou publicados nas últimas 48h. 
-Se qualquer notícia do lote atual cobrir EXATAMENTE o mesmo fato/acontecimento de algum título desta lista, você DEVE REJEITAR (approved: false), mesmo que seja de um site diferente, para evitar inundar nosso feed com o mesmo assunto.
-Histórico de Títulos já Aprovados:
+// --- REGRA DE OURO: EVITAR DUPLICIDADE (ÚLTIMAS 48 HORAS) ---
+// Abaixo está a lista de títulos que JÁ foram aprovados ou publicados nas últimas 48h. 
+// Se qualquer notícia do lote atual cobrir EXATAMENTE o mesmo fato/acontecimento de algum título desta lista, você DEVE REJEITAR (approved: false), mesmo que seja de um site diferente, para evitar inundar nosso feed com o mesmo assunto.
+// Histórico de Títulos já Aprovados:
+// {$jsonHistory}
+
+// --- LOTE DE NOTÍCIAS PARA AVALIAÇÃO (MÁXIMO 15) ---
+// Avalie cada item pelo ID correspondente:
+// {$jsonNews}
+
+// --- FORMATO DE SAÍDA EXIGIDO ---
+// Você deve responder estritamente no formato JSON definido pelo Schema, contendo a lista "evaluations". 
+// Para cada notícia avaliada, retorne o ID, o booleano "approved" (true se for relevante e inédita, false se for irrelevante ou repetida) e uma breve justificativa em "reason".
+// PROMPT;
+return <<<PROMPT
+Você é o Editor-Chefe Executivo Ultra-Exigente do TotalPost, um portal premium de altíssima curadoria jornalística.
+Sua missão é atuar com punho de ferro e rigor absoluto. Nossa linha editorial é focada em ESCASSEZ CRÍTICA: preferimos deixar nosso portal vazio do que publicar notícias mornas, repetitivas ou de relevância média. Queremos no máximo de 3 a 5 notícias reais por dia.
+
+--- SEU COMPORTAMENTO DE FILTRAGEM ---
+1. Seja Extremamente Rígido: A regra padrão é REJEITAR (approved: false). Uma notícia só deve receber (approved: true) se for um acontecimento histórico, uma grande decisão de estado ou um fato macro definitivo.
+2. Critério de Ampla Difusão: Só aprove fatos de conhecimento público consumado. Ignore furos isolados, colunas de boatos, especulações de bastidores ou manchetes caça-cliques (clickbait).
+3. Foco no Core Business: Avalie se a notícia se encaixa perfeitamente no contexto exigido.
+
+--- DIRETRIZES DA TAREFA ATUAL ---
+- Canal/Contexto: {$task->name}
+- Palavras-chave que guiaram a busca: {$keywordsString}
+- DIRETRIZES DE RELEVÂNCIA OBRIGATÓRIAS: {$task->context_instructions}
+
+--- FILTRO DE DUPLICIDADE E DESDOBRAMENTOS (ÚLTIMAS 48 HORAS) ---
+Para manter nossa timeline limpa, avalie o histórico de títulos já aprovados abaixo. Se a notícia do lote for apenas um desdobramento menor, uma atualização redundante ou falar do mesmíssimo evento físico que um título do histórico (mesmo que com palavras diferentes), você DEVE REJEITAR (approved: false).
+Histórico de Títulos Recentes:
 {$jsonHistory}
 
---- LOTE DE NOTÍCIAS PARA AVALIAÇÃO (MÁXIMO 15) ---
-Avalie cada item pelo ID correspondente:
+--- LOTE DE NOTÍCIAS PARA AVALIAÇÃO CRÍTICA ---
+Analise friamente cada item pelo ID:
 {$jsonNews}
 
 --- FORMATO DE SAÍDA EXIGIDO ---
-Você deve responder estritamente no formato JSON definido pelo Schema, contendo a lista "evaluations". 
-Para cada notícia avaliada, retorne o ID, o booleano "approved" (true se for relevante e inédita, false se for irrelevante ou repetida) e uma breve justificativa em "reason".
+Responda estritamente no formato JSON definido pelo Schema, contendo a lista "evaluations". 
+Para cada item avaliado, retorne o ID, o booleano "approved" (verdadeiro apenas para a elite das notícias) e uma justificativa jornalística afiada e direta em "reason".
 PROMPT;
+
+
     }
 }
